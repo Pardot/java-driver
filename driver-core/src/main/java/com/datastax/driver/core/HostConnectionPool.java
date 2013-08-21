@@ -105,6 +105,10 @@ class HostConnectionPool {
         Connection leastBusy = null;
         for (Connection connection : connections) {
             int inFlight = connection.inFlight.get();
+            if((inFlight > 0) && (connection.keyspace() == null)){
+                logger.warn("("+connections.size()+" active) Connection "+ connection.address.getHostAddress() +" using keyspace " + connection.keyspace() + " has " + inFlight + " inflight");
+                logger.warn("Keyspace should be: " + manager.poolsState.keyspace);
+            }
             if (inFlight < minInFlight) {
                 minInFlight = inFlight;
                 leastBusy = connection;
