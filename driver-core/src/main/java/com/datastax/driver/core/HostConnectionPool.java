@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.*;
 
+import org.apache.cassandra.exceptions.InvalidRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,6 +103,8 @@ class HostConnectionPool {
         int minInFlight = Integer.MAX_VALUE;
         Connection leastBusy = null;
         for (Connection connection : connections) {
+            logger.info("Connection "+ connection.address.getHostAddress() +" using keyspace " + connection.keyspace() + " has " + connection.inFlight.get() + " inflight");
+
             int inFlight = connection.inFlight.get();
             if (inFlight < minInFlight) {
                 minInFlight = inFlight;
