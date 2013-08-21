@@ -108,8 +108,6 @@ class HostConnectionPool {
             if((inFlight > 0) && (connection.keyspace() == null)){
                 logger.warn("("+connections.size()+" active) Connection "+ connection.address.getHostAddress() +" using keyspace " + connection.keyspace() + " has " + inFlight + " inflight");
                 logger.warn("Keyspace should be: " + manager.poolsState.keyspace);
-                logger.warn("Raw keyspace is: " + connection.clientState().getRawKeyspace());
-                connection.close();
             }
             if (inFlight < minInFlight) {
                 minInFlight = inFlight;
