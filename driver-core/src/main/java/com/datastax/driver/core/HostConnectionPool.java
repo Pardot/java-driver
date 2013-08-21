@@ -103,7 +103,10 @@ class HostConnectionPool {
         int minInFlight = Integer.MAX_VALUE;
         Connection leastBusy = null;
         for (Connection connection : connections) {
-            logger.info("Connection "+ connection.address.getHostAddress() +" using keyspace " + connection.keyspace() + " has " + connection.inFlight.get() + " inflight");
+
+            if((connection.inFlight.get() > 0) && (connection.keyspace() == null)){
+                logger.warn("("+connections.size()+" active) Connection "+ connection.address.getHostAddress() +" using keyspace " + connection.keyspace() + " has " + connection.inFlight.get() + " inflight");
+            }
 
             int inFlight = connection.inFlight.get();
             if (inFlight < minInFlight) {
